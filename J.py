@@ -54,11 +54,11 @@ def lambdaGll(acc,x):
 	else:
 		return backwardAppend(0,acc)
 
-def g(list):
-	return foldl(lambdaGl,[],list)		
+def g(lis):
+	return foldl(lambdaGl,[],lis)		
 
-def gll(list):
-	return foldl(lambdagll,[],list)
+def gll(lis):
+	return foldl(lambdagll,[],lis)
 
 def findHeadComma(commaList,intList):
 	return [fx(c,i) for (c,i) in zip(commaList, intList)]
@@ -73,13 +73,83 @@ def fx(c,i):
 		return []
 
 def trimm(list):
-	return foldl(lambdaTr,[],list)
-	
+	return foldl(lambdaTr,[],lis)
+
 def lambdaTr(acc,x):
 	if not(x):
 		return acc
 	else:
 		return backwardAppend(x,acc)
+
+def delHead(lis):
+	return list(map(lambdaDh,lis))
+
+def delLsat(list):
+	return list(map(lambdaDl,lis))
+
+def lambdaDh(x):
+	return x[1:]
+
+def lambdaDl(x):
+	return x[:-1]
+
+def delLastComma(lis):
+	if not lis:
+		return []
+	else:
+		return list(map(lambdaDlc,lis))
+
+def lambdaDlc(x):
+	if(last(x)==',' or last(x)=='.'):
+		return x[:-1]
+	else:
+		return x
+
+def delHeadComma(lis):
+	if not lis:
+		return []
+	else:
+		return list(map(lambdaDhc,lis))
+
+def lambdaDhc(x):
+	if (head(x)==',' or head(x)=='.'):
+		return x[1:]
+	else:
+		return x
+
+def addHeadComma(lis,c):
+	if not c:
+		return lis
+	else:
+		return list(map(lambda ci:list(map(lambda li:lambdaAhc(ci.li),lis)),c))
+
+
+
+def lambdaAhc(ci, li):
+	if ci==li[0]:
+		return(','+li)
+	else:
+		return li
+
+def compareAc(a,c):
+	if len(a)>len(c):
+		return a
+	else:
+		if len(a)<len(c):
+			return c
+		else:
+			if a==c:
+				return a
+			else:
+				if a>c:
+					return(head(c)+a)
+				else:
+					return(head(a)+c)
+
+
+
+
+
 
 def nothingHappen(a):
 	if len(a)==1:
