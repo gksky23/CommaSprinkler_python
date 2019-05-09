@@ -1,5 +1,6 @@
-import functools
+from functools import reduce
 import operator
+import functools
 
 
 def head(l):
@@ -58,7 +59,7 @@ def g(lis):
 	return foldl(lambdaGl,[],lis)		
 
 def gll(lis):
-	return foldl(lambdagll,[],lis)
+	return foldl(lambdaGll,[],lis)
 
 def findHeadComma(commaList,intList):
 	return [fx(c,i) for (c,i) in zip(commaList, intList)]
@@ -72,7 +73,7 @@ def fx(c,i):
 	else:
 		return []
 
-def trimm(list):
+def trimm(lis):
 	return foldl(lambdaTr,[],lis)
 
 def lambdaTr(acc,x):
@@ -84,7 +85,7 @@ def lambdaTr(acc,x):
 def delHead(lis):
 	return list(map(lambdaDh,lis))
 
-def delLsat(list):
+def delLast(lis):
 	return list(map(lambdaDl,lis))
 
 def lambdaDh(x):
@@ -121,13 +122,24 @@ def addHeadComma(lis,c):
 	if not c:
 		return lis
 	else:
-		return list(map(lambda ci:list(map(lambda li:lambdaAhc(ci.li),lis)),c))
-
-
+		return list(map(lambda ci: list(map(lambda li: lambdaAhc(ci,li),lis)),c))
+		#return list(map(lambda x: list(map(lambda y: lambdaAhc(x,y),lis)),c))
 
 def lambdaAhc(ci, li):
-	if ci==li[0]:
+	if ci==head(li):
 		return(','+li)
+	else:
+		return li
+
+def addLastComma(lis,c):
+	if not c:
+		return lis
+	else:
+		return list(map(lambda ci: list(map(lambda li: lambdaAlc(ci,li),lis)),c))
+
+def lambdaAlc(ci,li):
+	if ci==last(li):
+		return(li+',')
 	else:
 		return li
 
@@ -146,8 +158,33 @@ def compareAc(a,c):
 				else:
 					return(head(a)+c)
 
+def zipComma(re):
+	return reduce(lambda xs, acc: lambdaZc(xs,acc),re)
 
+def lambdaZc(xs,acc):
+	return [compareAc(x,ac) for(x,ac) in zip(xs,acc)]
 
+def ff(l):
+	return zipComma(addHeadComma(f(l.split()),delLast(delHead(trimm(findHeadComma(f(l.split()),g(f(l.split()))))))))
+
+def ffll(l):
+	return zipComma(addLastComma(f(l.split()),delHead(delLast(trimm(findLastComma(f(l.split()),gll(f(l.split()))))))))
+
+def sumComma(l,li):
+	return zipComma([l,li])
+
+def delHeadComma(lis):
+	s,*ss=lis
+	if head(s)==',' or head(s)=='.':
+		return [s[1:]]+ss
+	else:
+		return lis
+
+def mf(lis):
+	if(f(lis.split()==delHeadComma(sumComma(ff(lis),ffll(lis))))):
+		return f(lis.split())
+	else:
+		return mf(" ".join(delHeadComma(sumComma(ff(lis),ffll(lis)))))
 
 
 
