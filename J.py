@@ -33,9 +33,11 @@ def f(a):
 		s,s1,*ss=a
 		if not(head(s1)==',' or head(s1)=='.') and (last(s)==',' or last(s)=='.'):
 			return forwardAppend(s,f(forwardAppend((last(s)+s1),ss)))		
-		elif (head(s1)==','or head(s1)=='.')and not((last(s)==',') or (last(s)=='.')):
-			return forwardAppend((s+head(s1)),f(forwardAppend(s1,ss)))
-		else: return forwardAppend(s,f(forwardAppend(s1,ss)))
+		else:
+			if(head(s1)==','or head(s1)=='.')and not((last(s)==',') or (last(s)=='.')):
+				return forwardAppend((s+head(s1)),f(forwardAppend(s1,ss)))
+			else: 
+				return forwardAppend(s,f(forwardAppend(s1,ss)))
 
 def foldr(func, acc, xs):
 	return functools.reduce(lambda x,y: func(y,x), xs[::-1],acc)
@@ -126,7 +128,7 @@ def addHeadComma(lis,c):
 		#return list(map(lambda x: list(map(lambda y: lambdaAhc(x,y),lis)),c))
 
 def lambdaAhc(ci, li):
-	if ci==head(li):
+	if ci==li[0:len(ci)]:
 		return(','+li)
 	else:
 		return li
@@ -138,7 +140,7 @@ def addLastComma(lis,c):
 		return list(map(lambda ci: list(map(lambda li: lambdaAlc(ci,li),lis)),c))
 
 def lambdaAlc(ci,li):
-	if ci==last(li):
+	if ci==li[-len(ci):]:
 		return(li+',')
 	else:
 		return li
@@ -165,15 +167,15 @@ def lambdaZc(xs,acc):
 	return [compareAc(x,ac) for(x,ac) in zip(xs,acc)]
 
 def ff(l):
-	return zipComma(addHeadComma(f(l.split()),delLast(delHead(trimm(findHeadComma(f(l.split()),g(f(l.split()))))))))
+	return zipComma(addHeadComma(f(l.split()),delLastComma(delHead(trimm(findHeadComma(f(l.split()),g(f(l.split()))))))))
 
 def ffll(l):
-	return zipComma(addLastComma(f(l.split()),delHead(delLast(trimm(findLastComma(f(l.split()),gll(f(l.split()))))))))
+	return zipComma(addLastComma(f(l.split()),delHeadComma(delLast(trimm(findLastComma(f(l.split()),gll(f(l.split()))))))))
 
 def sumComma(l,li):
 	return zipComma([l,li])
 
-def delHeadComma(lis):
+def delHeadComma1(lis):
 	s,*ss=lis
 	if head(s)==',' or head(s)=='.':
 		return [s[1:]]+ss
@@ -181,12 +183,23 @@ def delHeadComma(lis):
 		return lis
 
 def mf(lis):
-	if(f(lis.split()==delHeadComma(sumComma(ff(lis),ffll(lis))))):
+	if(f(lis.split())==delHeadComma1(sumComma(ff(lis),ffll(lis)))):
 		return f(lis.split())
 	else:
-		return mf(" ".join(delHeadComma(sumComma(ff(lis),ffll(lis)))))
+		return mf(" ".join(delHeadComma1(sumComma(ff(lis),ffll(lis)))))
 
-
+def result1(lis):
+	if len(lis) == 1:
+		return lis
+	else:
+		s,s1,*ss=lis
+		if(last(s)==',' and head(s1)==',') or (last(s)=='.' and head(s1)=='.'):
+			return forwardAppend(s,result1(forwardAppend(s1[1:],ss)))
+		else:
+			if not(last(s)==',' or last(s)=='.') and (head(s1)==','):
+				return forwardAppend((s+','), result1(forwardAppend(s1[1:],ss)))
+			else:
+				return forwardAppend(s,result1(forwardAppend(s1,ss)))
 
 def nothingHappen(a):
 	if len(a)==1:
@@ -195,3 +208,4 @@ def nothingHappen(a):
 		s,s1,*ss=a
 		return forwardAppend(s,nothingHappen(forwardAppend(s1,ss)))
 		
+#2019.05.11 21:16 completed
